@@ -38,7 +38,7 @@ public class Product {
 	@JoinColumn(name="brand_id")
 	private Brand brand;
 	
-	@Transient
+	@Transient// untuk 
 	private Long brandId;
 	
 	@Column(nullable=false)
