@@ -5,10 +5,13 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.eksad.latihanrest.dao.BrandDao;
@@ -16,68 +19,91 @@ import com.eksad.latihanrest.dao.ProductDao;
 import com.eksad.latihanrest.model.Brand;
 import com.eksad.latihanrest.model.Product;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 
 @RestController
-@RequestMapping("product")
-public class ProductController
-{
+@RequestMapping(value = "/api/v1")
+@Api(tags = "Product")
+public class ProductController {
+	
 	@Autowired
 	ProductDao productDao;
 	
 	@Autowired
 	BrandDao brandDao;
 	
-	@RequestMapping("getByBrandId/{brandId}")
-	public List<Product> getByBrandId(@PathVariable Long brandId)
-	{
+	@ApiOperation(
+			value = "API to retieve all product data",
+			notes = "Return data with JSON Format",
+			tags = "Get Data API"
+			)
+	@GetMapping("getByBrandId/{brandId}")
+	public List<Product> getByBrandId(@PathVariable Long brandId){
 		List<Product> result = new ArrayList<Product>();
 		productDao.findByBrandId(brandId).forEach(result::add);
 		return result;
+	
 	}
 	
-	@RequestMapping(value="save",method = RequestMethod.POST)
-	public Product save(@RequestBody Product product)
-	{
+	@ApiOperation(
+			value = "add new product data",
+			notes = "Return data with JSON Format",
+			tags =  "Get Data API"
+			)
+	@PostMapping(value = "saveProduct")
+	public Product save(@RequestBody Product product) {
 		Brand brand = brandDao.findById(product.getBrandId()).orElse(null);
-		if (brand != null)
-		{
+		if (brand != null) {
 			product.setBrand(brand);
 			return productDao.save(product);
-		}
+		} 
+		
 		return null;
+		
 	}
 	
-	@RequestMapping(value="update/{id}",method = RequestMethod.PUT)
-	public String update(@RequestBody Product product,@PathVariable Long id)
-	{
-		Product productSelected = productDao.findById((id)).orElse(null);
-		if (productSelected != null)
-		{
+	@ApiOperation(
+			value =  "Update product data",
+			notes =  "Update product data to database",
+			tags = "Data Manipulation API"
+			)
+	@PutMapping (value = "updateProduct/{id}")
+	public Product update(@RequestBody Product product, @PathVariable Long id) {
+		Product productSelected = productDao.findById(id).orElse(null);
+		if (productSelected != null) {
+			productSelected.setBrandId(product.getBrandId());
 			productSelected.setName(product.getName());
-			productSelected.setBrand(product.getBrand());
 			productSelected.setPrice(product.getPrice());
 			
-			productDao.save(productSelected);
-			return "berhasil memperbaharui";
-		} else {
-			return "gagal memperbaharui";
+			return productDao.save(productSelected);
+		}else {
+			return null;
 		}
 	}
-	
-	@RequestMapping(value ="delete/{id}", method = RequestMethod.DELETE)
-	public HashMap<String, Object> delete(@PathVariable Long id)
-	{
+
+	@ApiOperation(
+			value =  "Delete product data",
+			notes =  "Delete product data to database",
+			tags = "Data Manipulation API"
+			)
+	@DeleteMapping (value = "deleteProduct/{id}")
+	public HashMap<String, Object> delete(@PathVariable Long id){
 		HashMap<String, Object> result = new HashMap<String, Object>();
 		productDao.deleteById(id);
 		result.put("message", "berhasil dihapus");
 		return result;
 	}
-	
-	@RequestMapping("getBySearch/{search}")
-	public List<Product> getBySearch(@PathVariable String search)
-	{
+
+	@ApiOperation(
+			value = "search product data by name",
+			notes = "Return data with JSON Format",
+			tags = "Get Data API"
+			)
+	@GetMapping("getBySearchProduct/{search}")
+	public List<Product> getBySearch(@PathVariable String search) {
 		List<Product> result = new ArrayList<Product>();
 		productDao.findBySearch(search).forEach(result::add);
-		return result;
+		return  result;
 	}
 }

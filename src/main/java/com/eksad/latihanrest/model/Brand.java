@@ -26,4 +26,24 @@ public class Brand extends BaseEntity{
 	
 	@Column(name= "product_type")
 	private String productType;
+
+	public Object getName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void setName(Object name2) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public Object getProductType() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void setProductType(Object productType2) {
+		// TODO Auto-generated method stub
+		
+	}
 }

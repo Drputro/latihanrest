@@ -46,4 +46,44 @@ public class Product {
 	
 	@Column(nullable=false)
 	private BigDecimal price;
+
+	public Long getBrandId() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void setBrand(Brand brand2) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public Object getName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void setName(Object name2) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public Brand getBrand() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public Object getPrice() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void setPrice(Object price2) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void setBrandId(Long brandId2) {
+		// TODO Auto-generated method stub
+		
+	}
 }
